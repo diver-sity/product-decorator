@@ -1,5 +1,6 @@
 
-## Description
+## Design
+The design/code structure generally follows the principle of composition over inheritance. It makes heavy use of functions' status as the first-class citizen in the node.js world, something missing from some object-oriented programming languages. 
 
 
 ## Installation
