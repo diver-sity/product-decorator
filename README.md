@@ -28,3 +28,8 @@ $ npm run start:prod
 $ npm run test
 ```
 
+
+#Assumptions
+- when the application is following the next page links and reaches a page where there is no product (an empty array), it is correct to stop processing other pages. 
+
+
