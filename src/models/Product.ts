@@ -8,4 +8,5 @@ export default interface Product {
     final_price: number;
     sku: string;
     name: string;
+    video_urls?: Array<string>
 }
