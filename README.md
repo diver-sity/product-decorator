@@ -32,5 +32,5 @@ $ npm run test
 
 #Assumptions
 - when the application is following the next page links and reaches a page where there is no product (an empty array), it is correct to stop processing other pages. 
-
+- The field video_count is a reliable indication of whether there is a video link or not for a given product. 
 
