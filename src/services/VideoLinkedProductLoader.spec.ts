@@ -24,7 +24,6 @@ describe('VideoLinkedProductLoader', () => {
           expect.assertions(1);
           return saveProducts([socks], 1).then(() => {
             const result = fs.readFileSync(path);
-            console.info(`result, ${result.toString()}`);
             expect(JSON.parse(result.toString() + "]")).toEqual([socks]);
           });
         });
