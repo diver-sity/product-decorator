@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import Product from "src/models/Product";
 
-export const path = `/tmp/product-decorator-videos.txt`;
+export const path = `/tmp/out.json`;
 
 const saveProducts = (products: Array<Product>, pageNumber: number): Promise<void | string> => {
     if (products.length === 0) {
