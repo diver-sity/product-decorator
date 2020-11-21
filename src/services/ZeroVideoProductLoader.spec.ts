@@ -2,7 +2,7 @@ import saveProducts from "./ZeroVideoProductLoader";
 import { socks } from "../fixtures/Products";
 import * as fs from "fs";
 
-describe('VideoLinkDecorator', () => {
+describe('ZeroVideoProductLoader', () => {
 
   describe('#saveProducts', () => {
     describe('if there is no product', () => {
