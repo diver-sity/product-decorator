@@ -24,7 +24,7 @@ const fetchFromSource = async (firstPageURL: string) => {
                     }
                 }
 
-                await processPage(data, isLast, paths);
+                await processPage(data, paths);
             }
         }
     } catch (error) {
@@ -35,7 +35,7 @@ const fetchFromSource = async (firstPageURL: string) => {
     return Promise.resolve();
 };
 
-async function processPage(data: ProductPagePayload, isLast: boolean, paths: Array<string>) {
+async function processPage(data: ProductPagePayload, paths: Array<string>) {
     const page = data.page;
     if (!isEmpty(data._embedded) && !isEmpty(data._embedded.product)) {
         const products = data._embedded.product;
@@ -48,7 +48,7 @@ async function processPage(data: ProductPagePayload, isLast: boolean, paths: Arr
 
         const withVideos = products.filter(p => p.video_count > 0);
         const withVideosOps = withVideos.map(p => addVideoURL(p))
-        await Promise.all(withVideosOps).then(decoProducts => saveLinkedProducts(decoProducts, page, isLast));
+        await Promise.all(withVideosOps).then(decoProducts => saveLinkedProducts(decoProducts, page));
     }
 }
 

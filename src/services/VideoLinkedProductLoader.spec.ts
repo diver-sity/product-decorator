@@ -29,26 +29,7 @@ describe('VideoLinkedProductLoader', () => {
         });
       });
 
-      describe('if it is the last page', () => {
-        it('saves a stringified array of products, removing the opening bracket, adding a comma in front', () => {
-          let pathToClear = path;
-          expect.assertions(1);
-          return saveProducts([socks], 15, true).then(() => {
-            const result = fs.readFileSync(path);
-            expect(JSON.parse("[" + result.toString().substr(1))).toEqual([socks]);
-          }).finally(() => {
-            if (pathToClear) {
-              try {
-                fs.unlinkSync(pathToClear);
-              } catch (error) {
-                console.error(`failed to remove ${pathToClear}, ${error}`)
-              }
-            }
-          })
-        });
-      });
-
-      describe('if it is not the first page, and not the last page', () => {
+      describe('if it is not the first page', () => {
         it('saves a stringified array of products, removing the opening and closing brackets, adding a comma in front', () => {
           let pathToClear = path;
           expect.assertions(1);

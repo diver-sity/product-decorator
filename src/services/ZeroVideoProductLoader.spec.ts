@@ -18,7 +18,7 @@ describe('ZeroVideoProductLoader', () => {
       it('saves a stringified array of products, removing the brackets', () => {
         let pathToClear;
         expect.assertions(1);
-        return saveProducts([socks], 1).then(path => {
+        return saveProducts([socks], 1).then((path: string) => {
           const result = fs.readFileSync(path);
           pathToClear = path;
           expect(JSON.parse(result.toString())).toEqual(socks);
