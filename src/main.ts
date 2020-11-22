@@ -8,6 +8,7 @@ import { redoLog } from './config/constants';
 
 async function bootstrap() {
   let paths = [];
+  let productHost = process.env["PRODUCT_HOST"] || "https://eve.theiconic.com.au";
   try {
     paths = await fs.promises.readFile(redoLog)
       .then((buffer) => buffer.toString())
@@ -15,7 +16,7 @@ async function bootstrap() {
         console.info(`no redoLog, starting from Page 1: `, JSON.stringify(error, undefined, 2));
         deleteExistingOutFile();
       }).then((url) => {
-        return fetchFromSource(url || "https://eve.theiconic.com.au/catalog/products?page=1&page_size=1000&sort=activated_at");
+        return fetchFromSource(url || `${productHost}/catalog/products?page=1&page_size=1000&sort=activated_at`);
       })
   } catch (error) {
     logger.error(`${error.message}, ${JSON.stringify(error)}`);

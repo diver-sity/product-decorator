@@ -6,7 +6,8 @@ import { AxiosError } from "axios";
 import logger from "../config/Logger";
 
 const addVideoURL = async (product: Product) => {
-    const url = `https://eve.theiconic.com.au/catalog/products/${product.sku}/videos`;
+    const host = process.env["VIDEO_HOST"] || "https://eve.theiconic.com.au";
+    const url = `${host}/catalog/products/${product.sku}/videos`;
     return axios.get(url).then(response => {
         const payload = response.data as VideoPreviewPayload;
         if (payload._embedded && !isEmpty(payload._embedded.videos_url)) {
