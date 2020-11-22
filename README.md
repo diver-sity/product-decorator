@@ -44,6 +44,8 @@ $ npm install
 $ npm run start
 ```
 
+The output file is `/tmp/out.json`. 
+
 ### Test
 
 ```bash
