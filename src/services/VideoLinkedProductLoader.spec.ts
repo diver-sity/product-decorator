@@ -2,7 +2,7 @@ import saveProducts from "./VideoLinkedProductLoader";
 import { socks } from "../fixtures/Products";
 import * as fs from "fs";
 import logger from "../config/Logger";
-import { outPath } from "src/config/constants";
+import { outPath } from "../config/constants";
 
 describe('VideoLinkedProductLoader', () => {
 

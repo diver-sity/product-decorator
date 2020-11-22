@@ -1,6 +1,6 @@
 import * as fs from "fs";
 import logger from "../config/Logger";
-import { outPath } from "src/config/constants";
+import { outPath } from "../config/constants";
 
 const assembleSmallFiles = (zeroVideoPaths: Array<string>) => {
     //sequential operations to ensure the original order

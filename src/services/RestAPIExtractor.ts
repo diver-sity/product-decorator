@@ -9,7 +9,7 @@ import logger from "../config/Logger";
 import ProductFetchError from "../errors/ProductFetchError";
 import FileOperationError from "../errors/FileOperationError";
 import TimeoutError from "../errors/TimeoutError";
-import { redoLog } from "src/config/constants";
+import { redoLog } from "../config/constants";
 
 const fetchFromSource = async (firstPageURL: string) => {
     const remainingPage = [firstPageURL];

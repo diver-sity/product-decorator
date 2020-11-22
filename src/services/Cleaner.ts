@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import { isEmpty } from "lodash";
 import logger from "../config/Logger";
-import { outPath } from "src/config/constants";
+import { outPath } from "../config/constants";
 
 const cleanUp = async (paths: Array<string>) => {
     if (paths && !isEmpty(paths)) {

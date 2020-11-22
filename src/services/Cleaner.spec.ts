@@ -1,7 +1,7 @@
 import { v4 as generator } from "uuid";
 import * as fs from "fs";
 import cleanUp from "./Cleaner";
-import { path } from "./VideoLinkedProductLoader";
+import { outPath } from "../config/constants";
 
 let paths = [];
 
@@ -42,9 +42,9 @@ describe('Cleaner', () => {
 
   describe('#deleteExistingOutFile', () => {
     it('delete out.json if it exists', () => {
-      fs.writeFileSync(path, "opt");
+      fs.writeFileSync(outPath, "opt");
 
-      const result = fs.readFileSync(path);
+      const result = fs.readFileSync(outPath);
       expect(result.toString()).toEqual("opt");
     });
   });

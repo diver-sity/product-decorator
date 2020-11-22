@@ -1,6 +1,6 @@
 import { promises as fs } from "fs";
 import Product from "src/models/Product";
-import { outPath } from "src/config/constants";
+import { outPath } from "../config/constants";
 
 const saveProducts = (products: Array<Product>, pageNumber: number): Promise<void | string> => {
     if (products.length === 0) {
