@@ -6,6 +6,16 @@ The process involved writing small temporary files for storing pages of products
 ## Design
 The data set could potentially reach 100 million items. If each item is of the size of about 3kb, the end result could be some hundred gigabytes, not something that can usually be held in memory. 
 The code structure generally follows the principle of composition over inheritance. It makes heavy use of functions' status as the first-class citizen in the node.js world, something missing from some object-oriented programming languages. 
+The initial intent was to fail fast. When any remote access fails, the process was designed to fail. But reality indicated that the process would never finish due to various 503 errors when accessing video URL APIS: 
+```
+     data:
+      { type: 'http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html',
+        title: 'Service Unavailable',
+        status: 503,
+        detail:
+         'Server error: `GET https://player.vimeo.com/video/454612934/config` resulted in a `503 backend read error` response:\n<!DOCTYPE html><!-- via fastly --><html lang=\\"en\\"><head><meta charset=\\"utf-8\\"><meta name=\\"robots\\" content=\\"nofoll (truncated...)\n' } },
+```
+The design then changed to log such failures but to continue processing other products. The outcome then becomes that even though some products may have video URLs, they may not be found in out.json due to processing errors. 
 
 
 ## Installation
