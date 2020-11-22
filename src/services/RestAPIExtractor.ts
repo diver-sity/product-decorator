@@ -32,15 +32,14 @@ const fetchFromSource = async (firstPageURL: string) => {
 
         const data = response.data as ProductPagePayload;
         logger.debug(`products' length: ${
-            data._embedded &&
-            data._embedded.product &&
-            data._embedded.product.length
+            data._embedded && data._embedded.product && data._embedded.product.length
             }`);
         if (!isEmpty(data)) {
-            if (!isEmpty(data._links)) {
-                if (!isEmpty(data._links.next)) {
-                    remainingPage.push(data._links.next.href);
-                }
+            if (
+                !isEmpty(data._links) && !isEmpty(data._links.next) &&
+                !isEmpty(data._links.next.href)
+            ) {
+                remainingPage.push(data._links.next.href);
             }
 
             try {
