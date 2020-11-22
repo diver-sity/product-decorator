@@ -1,5 +1,3 @@
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
 import * as fs from "fs";
 import fetchFromSource from "./services/RestAPIExtractor";
 import assembleSmallFiles from './services/InterimFileAssembler';
@@ -8,11 +6,7 @@ import cleanUp, { deleteExistingOutFile } from './services/Cleaner';
 import TimeoutError from './errors/TimeoutError';
 import { redoLog } from './config/constants';
 
-
 async function bootstrap() {
-  // const app = await NestFactory.create(AppModule);
-  // await app.close();
-
   let paths = [];
   try {
     paths = await fs.promises.readFile(redoLog)
