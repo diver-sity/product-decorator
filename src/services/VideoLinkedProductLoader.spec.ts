@@ -31,12 +31,38 @@ describe('VideoLinkedProductLoader', () => {
       });
 
       describe('if it is not the first page', () => {
-        it('saves a stringified array of products, removing the opening and closing brackets, adding a comma in front', () => {
+        describe('if the file exists', () => {
+
+          it('saves a stringified array of products, removing the opening and closing brackets, adding a comma in front', () => {
+            let pathToClear = path;
+            expect.assertions(1);
+            return saveProducts([socks], 2).then(() => {
+              const result = fs.readFileSync(path);
+              expect(JSON.parse("[" + result.toString().substr(1) + "]")).toEqual([socks]);
+            }).finally(() => {
+              if (pathToClear) {
+                try {
+                  fs.unlinkSync(pathToClear);
+                } catch (error) {
+                  logger.error(`failed to remove ${pathToClear}, ${error}`)
+                }
+              }
+            })
+          });
+        });
+      });
+
+      describe('if the file does not exist', () => {
+        it('saves a stringified array of products, removing the closing brackets', () => {
           let pathToClear = path;
           expect.assertions(1);
+          fs.unlinkSync(path);
+          const stat = jest.spyOn(fs.promises, "stat");
+          stat.mockRejectedValue(new Error("file not found"));
           return saveProducts([socks], 2).then(() => {
             const result = fs.readFileSync(path);
-            expect(JSON.parse("[" + result.toString().substr(1) + "]")).toEqual([socks]);
+            console.info(`result, ${result.toString()}`);
+            expect(JSON.parse(result.toString() + "]")).toEqual([socks]);
           }).finally(() => {
             if (pathToClear) {
               try {
@@ -48,6 +74,7 @@ describe('VideoLinkedProductLoader', () => {
           })
         });
       });
+
 
       describe('if write fails', () => {
         let appendFile: jest.SpyInstance;
