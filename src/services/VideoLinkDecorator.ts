@@ -11,7 +11,7 @@ const addVideoURL = async (product: Product) => {
         product.video_urls = urls;
         return product;
     }).catch((error: AxiosError) => {
-        console.error(`failed to access ${url}, error: ${error.toJSON()}`);
+        console.error(`failed to access ${url}, error: ${JSON.stringify(error.response.data)}`);
         return product;
     });
 };
