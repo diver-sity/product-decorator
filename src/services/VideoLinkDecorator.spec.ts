@@ -25,8 +25,8 @@ describe('VideoLinkDecorator', () => {
     describe('if fetch fails', () => {
       it('it logs the error and does not pass it to the caller', () => {
         get.mockRejectedValue({
-          toJSON: () => {
-            return "cannot connect";
+          response: {
+            data: "cannot connect"
           }
         });
         expect.assertions(1);
