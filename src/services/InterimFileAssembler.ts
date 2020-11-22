@@ -8,11 +8,13 @@ const assembleSmallFiles = (zeroVideoPaths: Array<string>) => {
     if (!exists) {
         fs.appendFileSync(path, "[");
     }
-    zeroVideoPaths.forEach(p => {
-        const data = fs.readFileSync(p)
-        logger.info(`adding ${p}`);
-        fs.appendFileSync(path, "," + data);
-    });
+    if (zeroVideoPaths && zeroVideoPaths.length > 0) {
+        zeroVideoPaths.forEach(p => {
+            const data = fs.readFileSync(p)
+            logger.info(`adding ${p}`);
+            fs.appendFileSync(path, "," + data);
+        });
+    }
     fs.appendFileSync(path, "]");
 }
 

@@ -44,7 +44,17 @@ describe('InterimFileAssembler', () => {
           expect(result).toEqual([]);
         });
       });
+
+      it('creates a final file with an empty array inside', () => {
+        fs.unlinkSync("/tmp/out.json");
+        assembleSmallFiles(undefined);
+        return fs.promises.readFile("/tmp/out.json").then(buffer => {
+          const result = JSON.parse(buffer.toString());
+          expect(result).toEqual([]);
+        });
+      });
     });
+
   });
 
   afterEach(() => {
