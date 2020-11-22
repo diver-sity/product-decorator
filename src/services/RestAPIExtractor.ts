@@ -5,32 +5,46 @@ import saveProducts from "./ZeroVideoProductLoader";
 import saveLinkedProducts from "./VideoLinkedProductLoader";
 import addVideoURL from "./VideoLinkDecorator";
 import logger from "../config/Logger";
+import ProductFetchError from "../errors/ProductFetchError";
+import FileOperationError from "../errors/FileOperationError";
 
 const fetchFromSource = async (firstPageURL: string) => {
     const remainingPage = [firstPageURL];
     const paths = [];
 
-    try {
-        while (remainingPage.length > 0) {
-            const page = remainingPage.pop();
-            logger.info(`fetching ${page}`);
-            const response = await axios.get(page);
+    while (remainingPage.length > 0) {
+        const page = remainingPage.pop();
+        logger.info(`fetching ${page}`);
+        let response;
 
-            const data = response.data as ProductPagePayload;
-            logger.debug(`products' length: ${data._embedded && data._embedded.product && data._embedded.product.length}`);
-            if (!isEmpty(data)) {
-                if (!isEmpty(data._links)) {
-                    if (!isEmpty(data._links.next)) {
-                        remainingPage.push(data._links.next.href);
-                    }
+        try {
+            response = await axios.get(page);
+        } catch (error) {
+            throw new ProductFetchError(`failed to fetch data around ${remainingPage}`, error);
+        }
+
+        const data = response.data as ProductPagePayload;
+        logger.debug(`products' length: ${
+            data._embedded &&
+            data._embedded.product &&
+            data._embedded.product.length
+            }`);
+        // if (data.page > 2) {
+        //     return Promise.resolve(paths);
+        // }
+        if (!isEmpty(data)) {
+            if (!isEmpty(data._links)) {
+                if (!isEmpty(data._links.next)) {
+                    remainingPage.push(data._links.next.href);
                 }
+            }
 
+            try {
                 await processPage(data, paths);
+            } catch (error) {
+                throw new FileOperationError(`failed to save data around ${remainingPage}`, error);
             }
         }
-    } catch (error) {
-        //TODO: may fail fast
-        logger.error(`failed to fetch data around ${remainingPage}`, error);
     }
 
     return Promise.resolve(paths);

@@ -4,6 +4,8 @@ import * as ZeroVideoProductLoader from "./ZeroVideoProductLoader";
 import * as VideoLinkedProductLoader from "./VideoLinkedProductLoader";
 import * as VideoLinkDecorator from "./VideoLinkDecorator";
 import { productWithNoVideo, productWithVideo, productWithVideoURL } from "../fixtures/Products";
+import ProductFetchError from "../errors/ProductFetchError";
+import FileOperationError from "../errors/FileOperationError";
 
 describe('RestAPIExtractor', () => {
   let get: jest.SpyInstance;
@@ -47,6 +49,17 @@ describe('RestAPIExtractor', () => {
       });
     });
 
+    describe('if fetch fails', () => {
+      it('throws an error', () => {
+        get.mockRejectedValueOnce(new Error("no connection"));
+
+        expect.assertions(1);
+        return fetchFromSource("http://localhost/1").catch((error) => {
+          expect(error).toBeInstanceOf(ProductFetchError);
+        })
+      });
+    });
+
     describe('if the page has products', () => {
       it('separates the products into two sets, decorates one set and saves products into files', () => {
         get.mockResolvedValueOnce({
@@ -67,6 +80,26 @@ describe('RestAPIExtractor', () => {
           expect(addVideoURL).toBeCalledTimes(1);
         })
       });
+
+      describe('if file operation fails', () => {
+        it('throws an error', () => {
+          get.mockResolvedValueOnce({
+            data: {
+              _embedded: {
+                product: [productWithNoVideo, productWithVideo]
+              }
+            }
+          });
+
+          saveProducts.mockRejectedValue(new Error("no connection"));
+          saveLinkedProducts.mockResolvedValue(null);
+          addVideoURL.mockResolvedValue(productWithVideoURL);
+          expect.assertions(1);
+          return fetchFromSource("http://localhost/1").catch((error) => {
+            expect(error).toBeInstanceOf(FileOperationError);
+          })
+        });
+      })
     });
 
   });
