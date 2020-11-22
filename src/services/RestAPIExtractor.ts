@@ -36,9 +36,6 @@ const fetchFromSource = async (firstPageURL: string) => {
             data._embedded.product &&
             data._embedded.product.length
             }`);
-        // if (data.page > 2) {
-        //     return Promise.resolve(paths);
-        // }
         if (!isEmpty(data)) {
             if (!isEmpty(data._links)) {
                 if (!isEmpty(data._links.next)) {
