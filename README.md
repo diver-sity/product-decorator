@@ -18,6 +18,10 @@ The initial intent was to fail fast. When any remote access fails, the process w
 The design then changed to log such failures but to continue processing other products. The outcome then becomes that even though some products may have video URLs, they may not be found in out.json due to processing errors. 
 
 
+# Side note for VSCode users 
+Some VSCode extensions run tests in the background. This was an issue while testing the application. Some of the tests delete out.json to have a clean start and if they run in the background, the application's running data could be deleted unwittingly. 
+
+
 ## Installation
 
 ```bash
