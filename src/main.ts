@@ -1,11 +1,12 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as fs from "fs";
-import fetchFromSource, { redoLog } from "./services/RestAPIExtractor";
+import fetchFromSource from "./services/RestAPIExtractor";
 import assembleSmallFiles from './services/InterimFileAssembler';
 import logger from "./config/Logger";
 import cleanUp, { deleteExistingOutFile } from './services/Cleaner';
 import TimeoutError from './errors/TimeoutError';
+import { redoLog } from './config/constants';
 
 
 async function bootstrap() {

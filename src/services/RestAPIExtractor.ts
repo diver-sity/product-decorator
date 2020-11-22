@@ -9,8 +9,7 @@ import logger from "../config/Logger";
 import ProductFetchError from "../errors/ProductFetchError";
 import FileOperationError from "../errors/FileOperationError";
 import TimeoutError from "../errors/TimeoutError";
-
-export const redoLog = `/tmp/product-decorator-redo.txt`;
+import { redoLog } from "src/config/constants";
 
 const fetchFromSource = async (firstPageURL: string) => {
     const remainingPage = [firstPageURL];

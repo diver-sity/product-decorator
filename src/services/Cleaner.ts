@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import { isEmpty } from "lodash";
 import logger from "../config/Logger";
-import { path } from "./VideoLinkedProductLoader";
+import { outPath } from "src/config/constants";
 
 const cleanUp = async (paths: Array<string>) => {
     if (paths && !isEmpty(paths)) {
@@ -21,8 +21,8 @@ const cleanUp = async (paths: Array<string>) => {
 
 export const deleteExistingOutFile = () => {
     try {
-        if (fs.existsSync(path)) {
-            fs.unlinkSync(path);
+        if (fs.existsSync(outPath)) {
+            fs.unlinkSync(outPath);
         }
     } catch (error) {
         logger.error(`failed to clean up before starting, ${JSON.stringify(error)}`);

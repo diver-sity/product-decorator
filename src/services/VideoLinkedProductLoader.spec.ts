@@ -1,13 +1,14 @@
-import saveProducts, { path } from "./VideoLinkedProductLoader";
+import saveProducts from "./VideoLinkedProductLoader";
 import { socks } from "../fixtures/Products";
 import * as fs from "fs";
 import logger from "../config/Logger";
+import { outPath } from "src/config/constants";
 
 describe('VideoLinkedProductLoader', () => {
 
   describe('#saveProducts', () => {
     beforeEach(() => {
-      fs.writeFileSync(path, "");
+      fs.writeFileSync(outPath, "");
     });
 
     describe('if there is no product', () => {
@@ -24,7 +25,7 @@ describe('VideoLinkedProductLoader', () => {
         it('saves a stringified array of products, removing the closing bracket', () => {
           expect.assertions(1);
           return saveProducts([socks], 1).then(() => {
-            const result = fs.readFileSync(path);
+            const result = fs.readFileSync(outPath);
             expect(JSON.parse(result.toString() + "]")).toEqual([socks]);
           });
         });
@@ -34,10 +35,10 @@ describe('VideoLinkedProductLoader', () => {
         describe('if the file exists', () => {
 
           it('saves a stringified array of products, removing the opening and closing brackets, adding a comma in front', () => {
-            let pathToClear = path;
+            let pathToClear = outPath;
             expect.assertions(1);
             return saveProducts([socks], 2).then(() => {
-              const result = fs.readFileSync(path);
+              const result = fs.readFileSync(outPath);
               expect(JSON.parse("[" + result.toString().substr(1) + "]")).toEqual([socks]);
             }).finally(() => {
               if (pathToClear) {
@@ -54,13 +55,13 @@ describe('VideoLinkedProductLoader', () => {
 
       describe('if the file does not exist', () => {
         it('saves a stringified array of products, removing the closing brackets', () => {
-          let pathToClear = path;
+          let pathToClear = outPath;
           expect.assertions(1);
-          fs.unlinkSync(path);
+          fs.unlinkSync(outPath);
           const stat = jest.spyOn(fs.promises, "stat");
           stat.mockRejectedValue(new Error("file not found"));
           return saveProducts([socks], 2).then(() => {
-            const result = fs.readFileSync(path);
+            const result = fs.readFileSync(outPath);
             console.info(`result, ${result.toString()}`);
             expect(JSON.parse(result.toString() + "]")).toEqual([socks]);
           }).finally(() => {

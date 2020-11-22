@@ -1,21 +1,21 @@
 import * as fs from "fs";
-import { path } from "./VideoLinkedProductLoader";
 import logger from "../config/Logger";
+import { outPath } from "src/config/constants";
 
 const assembleSmallFiles = (zeroVideoPaths: Array<string>) => {
     //sequential operations to ensure the original order
-    const exists = fs.existsSync(path);
+    const exists = fs.existsSync(outPath);
     if (!exists) {
-        fs.appendFileSync(path, "[");
+        fs.appendFileSync(outPath, "[");
     }
     if (zeroVideoPaths && zeroVideoPaths.length > 0) {
         zeroVideoPaths.forEach(p => {
             const data = fs.readFileSync(p)
             logger.info(`adding ${p}`);
-            fs.appendFileSync(path, "," + data);
+            fs.appendFileSync(outPath, "," + data);
         });
     }
-    fs.appendFileSync(path, "]");
+    fs.appendFileSync(outPath, "]");
 }
 
 export default assembleSmallFiles;
