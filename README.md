@@ -1,4 +1,4 @@
-##Solution
+### Solution
 The problem is modelled as an ETL process of combining data from two sources. Large files and large in-memory data structures are key concerns addressed by this solution. 
 The solution involved writing small temporary files for storing pages of products and finally combining these small files into an output file. The preferred order is ensured via two sets of temporary files:
 1. one file for products with video URLs (this is also the final file)
@@ -13,7 +13,7 @@ Temporary files are cleaned up at the end.
 out.json was tested to be valid JSON. 
 
 
-## Design
+### Design
 The data set could potentially reach 100 million items. If each item is of the size of about 3kb, the end result could be some hundred gigabytes, not something that can usually be held in memory. 
 The code structure generally follows the principle of composition over inheritance. It makes heavy use of functions' status as the first-class citizen in the node.js world, something missing from some object-oriented programming languages. 
 The initial design was to fail fast. When any remote access fails, the process was designed to fail. But reality indicated that the process would never finish due to various 503 errors when accessing video URL APIs: 
@@ -28,23 +28,23 @@ The initial design was to fail fast. When any remote access fails, the process w
 The design then changed to log such failures but to continue processing other products. The outcome then becomes that even though some products may have video URLs according to https://eve.theiconic.com.au/catalog/products, such URLs may not be found in out.json due to processing errors. There was no requirement on this.
 
 
-# Side note for VSCode users 
+### Side note for VSCode users 
 Some VSCode extensions run tests in the background. This was an issue while testing the application. Some of the tests delete out.json to have a clean start and if they run in the background, the application's running data could be deleted unwittingly. 
 
 
-## Installation
+### Installation
 
 ```bash
 $ npm install
 ```
 
-## Running the app
+### Running the app
 
 ```bash
 $ npm run start
 ```
 
-## Test
+### Test
 
 ```bash
 # unit tests
@@ -52,7 +52,7 @@ $ npm run test
 ```
 
 
-#Assumptions
+### Assumptions
 - when the application is following the next page links and reaches a page where there is no product (an empty array), it is correct to stop processing other pages. 
 - The field video_count is a reliable indication of whether there is a video link or not for a given product. 
 - There is enough disk space for storing all the files required for this ETL process, and relevant file operations are permitted, especially on /tmp. 
