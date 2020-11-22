@@ -1,10 +1,10 @@
 ### Solution
 The problem is modelled as an ETL process of combining data from two sources. Large files and large in-memory data structures are key concerns addressed by this solution. 
-The solution involved writing small temporary files for storing pages of products and finally combining these small files into an output file. The preferred order is ensured via two sets of temporary files:
+The solution involved following the HATEOAS `next` links, writing small temporary files for storing pages of products and finally combining these small files into an output file. The preferred order is ensured via two sets of temporary files:
 1. one file for products with video URLs (this is also the final file)
-2. a set of files for products without video URLs. Products without video URLs are the majority so one file could potentially be huge and hard to work with. Small files allow a way for trouble-shoooting. 
+2. a set of files for products without video URLs. Products without video URLs are the majority so one file could potentially be huge and hard to work with. Small files allow for trouble-shoooting. 
 
-A common pain point of running a long ETL process is the loss of already processed things and having to start over again. The solution implemented a redo log mechanism so that the process can pick up from where it left if it failed due to errors such as timing out. 
+A common pain point of running a long ETL process is the loss of already processed things and having to start over again. The solution implemented a redo log mechanism so that the process can pick up from where it left if it failed due to errors such as timing out. HATEOAS link following enabled this mechanism to some extent. 
 
 The original order within each set is maintained. 
 
@@ -59,4 +59,16 @@ $ npm run test
 - If any API read fails, the ETL process should stop. The result will not have all products even if all other reads are fine. 
 - Products that have preview videos are a very small minority. 
 - HATEOAS is implemented with good consistency across `_links.last`, `page_size`, `total_items`, `page_count` and `page`.
+
+
+### Code structure
+As there is no request/response handling, no controller was created. Most functionalities and unit tests are in the `src/services` folder. End-to-end testing seems impractical given the size of the given data set, or lack of a smaller one. There seems a preference to put unit tests along source files. Otherwise, there would have been a `test` folder and that would better hold something like test fixtures. 
+Under `src`
+- `main.ts`: entry to the application
+- `services`: data extraction, transformation, loading and related functionalities. `RestAPIExtractor` is the entry point to the ETL functionality. 
+- `dto`: data transfer objects
+- `errors`: custom errors
+- `fixtures`: test fixtures
+- `models`: data models
+
 
