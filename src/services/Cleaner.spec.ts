@@ -1,6 +1,7 @@
 import { v4 as generator } from "uuid";
 import * as fs from "fs";
-import cleanUP from "./Cleaner";
+import cleanUp from "./Cleaner";
+import { path } from "./VideoLinkedProductLoader";
 
 let paths = [];
 
@@ -12,7 +13,7 @@ describe('Cleaner', () => {
     ];
   });
 
-  describe('#cleanUP', () => {
+  describe('#cleanUp', () => {
     it('removes the given files', () => {
       paths.forEach(p => {
         fs.writeFileSync(p, p);
@@ -20,7 +21,7 @@ describe('Cleaner', () => {
 
       paths.push("/not/a/valid/path.txt");
       expect.assertions(3);
-      return cleanUP(paths).then(() => {
+      return cleanUp(paths).then(() => {
         paths.forEach(p => {
           expect(fs.existsSync(p)).toBe(false);
         });
@@ -32,10 +33,19 @@ describe('Cleaner', () => {
         const unlink = jest.spyOn(fs, "unlink");
 
         expect.assertions(1);
-        return cleanUP([]).then(() => {
+        return cleanUp([]).then(() => {
           expect(unlink).toBeCalledTimes(0);
         });
       });
+    });
+  });
+
+  describe('#deleteExistingOutFile', () => {
+    it('delete out.json if it exists', () => {
+      fs.writeFileSync(path, "opt");
+
+      const result = fs.readFileSync(path);
+      expect(result.toString()).toEqual("opt");
     });
   });
 
