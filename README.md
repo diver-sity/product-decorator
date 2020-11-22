@@ -10,7 +10,7 @@ The original order within each set is maintained.
 
 Temporary files are cleaned up at the end. 
 
-Code was written following TDD. out.json was also manually verified to be valid JSON. 
+Code was written following TDD, in node.js 10.20, Typescript 3.9.5. out.json was also manually verified to be valid JSON. 
 
 
 ### Design
