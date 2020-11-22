@@ -7,5 +7,5 @@ axios.interceptors.response.use((response) => {
 });
 
 export default axios.create({
-    timeout: 10000
+    timeout: 30000
 })
