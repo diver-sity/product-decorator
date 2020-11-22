@@ -1,5 +1,5 @@
 ##Solution
-The problem is modelled as an ETL process of combining data from two sources. 
+The problem is modelled as an ETL process of combining data from two sources. Large files and large in-memory data structures are key concerns addressed by this solution. 
 The solution involved writing small temporary files for storing pages of products and finally combining these small files into an output file. The preferred order is ensured via two sets of temporary files:
 1. one file for products with video URLs (this is also the final file)
 2. a set of files for products without video URLs. Products without video URLs are the majority so one file could potentially be huge and hard to work with. Small files allow a way for trouble-shoooting. 
@@ -7,6 +7,8 @@ The solution involved writing small temporary files for storing pages of product
 The original order within each set is maintained. 
 
 Temporary files are cleaned up at the end. 
+
+out.json was tested to be valid JSON. 
 
 
 ## Design
