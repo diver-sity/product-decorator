@@ -3,6 +3,7 @@ import { path } from "./VideoLinkedProductLoader";
 import logger from "../config/Logger";
 
 const assembleSmallFiles = (zeroVideoPaths: Array<string>) => {
+    //sequential operations to ensure the original order
     const exists = fs.existsSync(path);
     if (!exists) {
         fs.appendFileSync(path, "[");
