@@ -15,7 +15,7 @@ Code was written following TDD, in node.js 10.20, Typescript 3.9.5. out.json was
 
 ### Design
 The data set could potentially reach 100 million items. If each item is of the size of about 3kb, the end result could be some hundred gigabytes, not something that can usually be held in memory. 
-The code structure generally follows the principle of composition over inheritance. It makes heavy use of functions' status as the first-class citizen in the node.js world, something missing from some object-oriented programming languages. 
+The code structure generally follows the principle of composition over inheritance. It makes heavy use of functions' status as the first-class citizen in the node.js world, something missing from some object-oriented programming languages, and also duck-typing in Typescript and the read-only nature of operations on the source data set. 
 The initial design was to fail fast. When any remote access fails, the process was designed to fail. But reality indicated that the process would never finish due to various 503 errors when accessing video URL APIs: 
 ```
      data:
