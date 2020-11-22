@@ -11,16 +11,16 @@ const fetchFromSource = async (firstPageURL: string) => {
 
     try {
         while (remainingPage.length > 0) {
-            const response = await axios.get(remainingPage.pop());
+            const page = remainingPage.pop();
+            console.info(`fetching ${page}`);
+            const response = await axios.get(page);
 
             const data = response.data as ProductPagePayload;
+            console.debug(`products' length: ${data._embedded && data._embedded.product && data._embedded.product.length}`);
             if (!isEmpty(data)) {
-                let isLast = false;
                 if (!isEmpty(data._links)) {
                     if (!isEmpty(data._links.next)) {
                         remainingPage.push(data._links.next.href);
-                    } else {
-                        isLast = true;
                     }
                 }
 
@@ -28,15 +28,16 @@ const fetchFromSource = async (firstPageURL: string) => {
             }
         }
     } catch (error) {
+        //TODO: may fail fast
         console.error(`failed to fetch data around ${remainingPage}`, error);
     }
 
-
-    return Promise.resolve();
+    return Promise.resolve(paths);
 };
 
 async function processPage(data: ProductPagePayload, paths: Array<string>) {
     const page = data.page;
+
     if (!isEmpty(data._embedded) && !isEmpty(data._embedded.product)) {
         const products = data._embedded.product;
         const withoutVideos = products.filter(p => p.video_count == 0);
@@ -48,7 +49,17 @@ async function processPage(data: ProductPagePayload, paths: Array<string>) {
 
         const withVideos = products.filter(p => p.video_count > 0);
         const withVideosOps = withVideos.map(p => addVideoURL(p))
-        await Promise.all(withVideosOps).then(decoProducts => saveLinkedProducts(decoProducts, page));
+        console.info(`adding video links to ${withVideos.length}`);
+        if (page === 1) {
+            await Promise.all(withVideosOps)
+                .then(decoProducts => saveLinkedProducts(decoProducts, page));
+        } else {
+            while (withVideosOps.length > 0) {
+                const opsThisTime = withVideosOps.splice(0, 20);
+                await Promise.all(opsThisTime)
+                    .then(decoProducts => saveLinkedProducts(decoProducts, page));
+            }
+        }
     }
 }
 
