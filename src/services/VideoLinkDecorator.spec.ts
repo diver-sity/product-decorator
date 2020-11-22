@@ -23,11 +23,15 @@ describe('VideoLinkDecorator', () => {
     });
 
     describe('if fetch fails', () => {
-      it('it passes errors to the caller', () => {
-        get.mockRejectedValue(new Error("cannot connect"));
+      it('it logs the error and does not pass it to the caller', () => {
+        get.mockRejectedValue({
+          toJSON: () => {
+            return "cannot connect";
+          }
+        });
         expect.assertions(1);
-        return addVideoURL(socks).catch(error => {
-          expect(error).toEqual(new Error("cannot connect"));
+        return addVideoURL(socks).then(result => {
+          expect(result).toEqual(socks);
         })
       });
     });
