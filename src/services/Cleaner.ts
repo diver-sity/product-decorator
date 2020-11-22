@@ -6,7 +6,7 @@ const cleanUp = async (paths: Array<string>) => {
         const promises = paths.map(p =>
             fs.promises
                 .unlink(p)
-                .then(() => logger.info(`cleaned up, ${p}`))
+                .then(() => logger.info(`cleaned up: ${p}`))
                 .catch(error =>
                     logger.error(`cannot remove ${p}, error: ${JSON.stringify(error)}`)
                 )
