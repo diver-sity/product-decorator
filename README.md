@@ -4,6 +4,8 @@ The solution involved writing small temporary files for storing pages of product
 1. one file for products with video URLs (this is also the final file)
 2. a set of files for products without video URLs. Products without video URLs are the majority so one file could potentially be huge and hard to work with. Small files allow a way for trouble-shoooting. 
 
+A common pain point of running a long ETL process is the loss of already processed things and having to start over again. The solution implemented a redo log mechanism so that the process can pick up from where it left if it failed due to errors such as timing out. 
+
 The original order within each set is maintained. 
 
 Temporary files are cleaned up at the end. 
