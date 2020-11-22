@@ -1,3 +1,4 @@
+import * as fs from "fs";
 import { isEmpty } from "lodash";
 import axios from "../config/axiosInstance";
 import ProductPagePayload from "src/dto/ProductPagePayload";
@@ -7,6 +8,9 @@ import addVideoURL from "./VideoLinkDecorator";
 import logger from "../config/Logger";
 import ProductFetchError from "../errors/ProductFetchError";
 import FileOperationError from "../errors/FileOperationError";
+import TimeoutError from "../errors/TimeoutError";
+
+export const redoLog = `/tmp/product-decorator-redo.txt`;
 
 const fetchFromSource = async (firstPageURL: string) => {
     const remainingPage = [firstPageURL];
@@ -18,8 +22,12 @@ const fetchFromSource = async (firstPageURL: string) => {
         let response;
 
         try {
-            response = await axios.get(page);
+            response = await fs.promises.writeFile(redoLog, page, { flag: "w" })
+                .then(() => axios.get(page));
         } catch (error) {
+            if (error.code === "ECONNABORTED") {
+                throw new TimeoutError(`failed to fetch data around ${remainingPage}`, error);
+            }
             throw new ProductFetchError(`failed to fetch data around ${remainingPage}`, error);
         }
 

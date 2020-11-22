@@ -6,6 +6,7 @@ import * as VideoLinkDecorator from "./VideoLinkDecorator";
 import { productWithNoVideo, productWithVideo, productWithVideoURL } from "../fixtures/Products";
 import ProductFetchError from "../errors/ProductFetchError";
 import FileOperationError from "../errors/FileOperationError";
+import TimeoutError from "../errors/TimeoutError";
 
 describe('RestAPIExtractor', () => {
   let get: jest.SpyInstance;
@@ -50,7 +51,19 @@ describe('RestAPIExtractor', () => {
     });
 
     describe('if fetch fails', () => {
-      it('throws an error', () => {
+
+      describe('if it is timing out', () => {
+        it('throws a timeout error', () => {
+          get.mockRejectedValueOnce({ code: "ECONNABORTED" });
+
+          expect.assertions(1);
+          return fetchFromSource("http://localhost/1").catch((error) => {
+            expect(error).toBeInstanceOf(TimeoutError);
+          })
+        });
+      });
+
+      it('throws a ProductFetchError error', () => {
         get.mockRejectedValueOnce(new Error("no connection"));
 
         expect.assertions(1);
