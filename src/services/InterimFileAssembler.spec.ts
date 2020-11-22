@@ -1,26 +1,13 @@
 import * as fs from "fs";
-import fetchFromSource from "./RestAPIExtractor";
-import * as ZeroVideoProductLoader from "./ZeroVideoProductLoader";
-import * as VideoLinkedProductLoader from "./VideoLinkedProductLoader";
-import * as VideoLinkDecorator from "./VideoLinkDecorator";
-import { productWithNoVideo, productWithVideo, productWithVideoURL } from "../fixtures/Products";
 import assembleSmallFiles from "./InterimFileAssembler";
 
 describe('InterimFileAssembler', () => {
-  let get: jest.SpyInstance;
-  let saveProducts: jest.SpyInstance;
-  let saveLinkedProducts: jest.SpyInstance;
-  let addVideoURL: jest.SpyInstance;
   const EXPECTED = [{ "video_count": 2, "price": 2.5, "markdown_price": 2, "special_price": 1.5, "returnable": false, "final_sale": false, "final_price": null, "sku": "ksk53-skd82-gg232-jd8s2", "name": "soccer socks" }, { "video_count": 2, "price": 2.5, "markdown_price": 2, "special_price": 1.5, "returnable": false, "final_sale": false, "final_price": null, "sku": "ksk53-skd82-gg232-jd8s2", "name": "soccer socks" }, { "video_count": 2, "price": 2.5, "markdown_price": 2, "special_price": 1.5, "returnable": false, "final_sale": false, "final_price": null, "sku": "ksk53-skd82-gg232-jd8s2", "name": "soccer socks" }, { "video_count": 2, "price": 2.5, "markdown_price": 2, "special_price": 1.5, "returnable": false, "final_sale": false, "final_price": null, "sku": "ksk53-skd82-gg232-jd8s2", "name": "soccer socks" }];
 
 
   beforeEach(() => {
     const data = fs.readFileSync("./src/fixtures/out.copy.json");
     fs.writeFileSync("/tmp/out.json", data);
-
-    saveProducts = jest.spyOn(ZeroVideoProductLoader, "default");
-    saveLinkedProducts = jest.spyOn(VideoLinkedProductLoader, "default");
-    addVideoURL = jest.spyOn(VideoLinkDecorator, "default");;
   });
 
   describe('#assembleSmallFiles', () => {
