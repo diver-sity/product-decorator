@@ -1,6 +1,7 @@
 import saveProducts from "./ZeroVideoProductLoader";
 import { socks } from "../fixtures/Products";
 import * as fs from "fs";
+import logger from "../config/Logger";
 
 describe('ZeroVideoProductLoader', () => {
 
@@ -27,7 +28,7 @@ describe('ZeroVideoProductLoader', () => {
             try {
               fs.unlinkSync(pathToClear);
             } catch (error) {
-              console.error(`failed to remove ${pathToClear}, ${error}`)
+              logger.error(`failed to remove ${pathToClear}, ${error}`)
             }
           }
         })

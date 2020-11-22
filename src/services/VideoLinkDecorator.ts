@@ -2,6 +2,7 @@ import axios from "../config/axiosInstance";
 import Product from "src/models/Product";
 import VideoPreviewPayload from "src/dto/VideoPreviewPayload";
 import { AxiosError } from "axios";
+import logger from "../config/Logger";
 
 const addVideoURL = async (product: Product) => {
     const url = `https://eve.theiconic.com.au/catalog/products/${product.sku}/videos`;
@@ -11,7 +12,7 @@ const addVideoURL = async (product: Product) => {
         product.video_urls = urls;
         return product;
     }).catch((error: AxiosError) => {
-        console.error(`failed to access ${url}, error: ${JSON.stringify(error.response.data)}`);
+        logger.error(`failed to access ${url}, error: ${JSON.stringify(error.response.data)}`);
         return product;
     });
 };

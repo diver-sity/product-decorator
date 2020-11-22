@@ -1,6 +1,7 @@
 import saveProducts, { path } from "./VideoLinkedProductLoader";
 import { socks } from "../fixtures/Products";
 import * as fs from "fs";
+import logger from "../config/Logger";
 
 describe('VideoLinkedProductLoader', () => {
 
@@ -41,7 +42,7 @@ describe('VideoLinkedProductLoader', () => {
               try {
                 fs.unlinkSync(pathToClear);
               } catch (error) {
-                console.error(`failed to remove ${pathToClear}, ${error}`)
+                logger.error(`failed to remove ${pathToClear}, ${error}`)
               }
             }
           })

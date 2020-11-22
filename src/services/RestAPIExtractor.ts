@@ -4,6 +4,7 @@ import ProductPagePayload from "src/dto/ProductPagePayload";
 import saveProducts from "./ZeroVideoProductLoader";
 import saveLinkedProducts from "./VideoLinkedProductLoader";
 import addVideoURL from "./VideoLinkDecorator";
+import logger from "../config/Logger";
 
 const fetchFromSource = async (firstPageURL: string) => {
     const remainingPage = [firstPageURL];
@@ -12,11 +13,11 @@ const fetchFromSource = async (firstPageURL: string) => {
     try {
         while (remainingPage.length > 0) {
             const page = remainingPage.pop();
-            console.info(`fetching ${page}`);
+            logger.info(`fetching ${page}`);
             const response = await axios.get(page);
 
             const data = response.data as ProductPagePayload;
-            console.debug(`products' length: ${data._embedded && data._embedded.product && data._embedded.product.length}`);
+            logger.debug(`products' length: ${data._embedded && data._embedded.product && data._embedded.product.length}`);
             if (!isEmpty(data)) {
                 if (!isEmpty(data._links)) {
                     if (!isEmpty(data._links.next)) {
@@ -29,7 +30,7 @@ const fetchFromSource = async (firstPageURL: string) => {
         }
     } catch (error) {
         //TODO: may fail fast
-        console.error(`failed to fetch data around ${remainingPage}`, error);
+        logger.error(`failed to fetch data around ${remainingPage}`, error);
     }
 
     return Promise.resolve(paths);
@@ -49,13 +50,13 @@ async function processPage(data: ProductPagePayload, paths: Array<string>) {
 
         const withVideos = products.filter(p => p.video_count > 0);
         const withVideosOps = withVideos.map(p => addVideoURL(p))
-        console.info(`adding video links to ${withVideos.length}`);
+        logger.info(`adding video links to ${withVideos.length}`);
         if (page === 1) {
             await Promise.all(withVideosOps)
                 .then(decoProducts => saveLinkedProducts(decoProducts, page));
         } else {
             while (withVideosOps.length > 0) {
-                const opsThisTime = withVideosOps.splice(0, 20);
+                const opsThisTime = withVideosOps.splice(0, 30);
                 await Promise.all(opsThisTime)
                     .then(decoProducts => saveLinkedProducts(decoProducts, page));
             }
