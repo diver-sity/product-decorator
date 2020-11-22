@@ -30,7 +30,7 @@ async function bootstrap() {
   try {
     assembleSmallFiles(paths);
   } catch (error) {
-    logger.error(`failed to assemble temporary files, ${JSON.stringify(error)}`);
+    logger.error(`failed to assemble temporary files, ${error}`);
   }
 
   await cleanUp(paths);
